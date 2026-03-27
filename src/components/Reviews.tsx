@@ -1,29 +1,19 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Quote, Star } from 'lucide-react';
+import { useSection } from '../context/ContentContext';
 
-const reviews = [
-  {
-    name: 'Арман Ибраев',
-    position: 'Директор ТОО «StroyTech»',
-    text: 'Работаем с ProfAs уже второй год. Обучили более 50 сотрудников по ПТМ и БиОТ. Очень удобно, что менеджеры сами следят за сроками и напоминают о продлении. Юридическая чистота документов на высшем уровне.',
-    avatar: 'https://picsum.photos/seed/review1/100/100',
-  },
-  {
-    name: 'Елена Кузнецова',
-    position: 'Инженер по охране труда',
-    text: 'Платформа для онлайн-обучения просто спасение. Сотрудники проходят тесты в свободное время, а я получаю готовые протоколы и удостоверения на следующий день. Никакой бумажной волокиты.',
-    avatar: 'https://picsum.photos/seed/review2/100/100',
-  },
-  {
-    name: 'Марат Сафин',
-    position: 'HR-менеджер логистической компании',
-    text: 'Лучшее соотношение цены и качества в Казахстане. Программы всегда актуальные, лекторы — практики с огромным опытом. Получили сертификаты ISO 45001 благодаря их консультациям.',
-    avatar: 'https://picsum.photos/seed/review3/100/100',
-  },
+const FALLBACK_REVIEWS = [
+  { name: 'Арман Ибраев', position: 'Директор ТОО «StroyTech»', text: 'Работаем с ProfAs уже второй год. Обучили более 50 сотрудников по ПТМ и БиОТ.', avatar: 'https://picsum.photos/seed/review1/100/100', stars: 5 },
+  { name: 'Елена Кузнецова', position: 'Инженер по охране труда', text: 'Платформа для онлайн-обучения просто спасение.', avatar: 'https://picsum.photos/seed/review2/100/100', stars: 5 },
+  { name: 'Марат Сафин', position: 'HR-менеджер логистической компании', text: 'Лучшее соотношение цены и качества в Казахстане.', avatar: 'https://picsum.photos/seed/review3/100/100', stars: 5 },
 ];
 
 export const Reviews = () => {
+  const cms = useSection('reviews', {} as Record<string, unknown>);
+  const heading = (cms.heading as string) ?? 'Отзывы наших клиентов';
+  const subheading = (cms.subheading as string) ?? '';
+  const reviews = (cms.items as typeof FALLBACK_REVIEWS) ?? FALLBACK_REVIEWS;
   return (
     <section className="py-24 bg-slate-50" id="reviews">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -34,7 +24,7 @@ export const Reviews = () => {
             viewport={{ once: true }}
             className="text-4xl font-extrabold text-slate-900"
           >
-            Отзывы наших клиентов
+            {heading}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -43,7 +33,7 @@ export const Reviews = () => {
             transition={{ delay: 0.1 }}
             className="mt-4 text-slate-500 text-lg max-w-2xl mx-auto"
           >
-            Нам доверяют профессионалы со всего Казахстана. Вот что они говорят о сотрудничестве с нами.
+            {subheading}
           </motion.p>
         </div>
 
