@@ -4,47 +4,25 @@ import { Flame, Shield, Zap, ArrowRight } from 'lucide-react';
 import { HardHat } from 'lucide-react';
 import { Button } from './ui/Button';
 import { cn } from '@/src/lib/utils';
+import { useSection } from '../context/ContentContext';
 
-const courses = [
-  {
-    id: 1,
-    title: 'Обучение ПТМ (Пожарно-технический минимум)',
-    description: 'Обучение руководителей и ответственных лиц по пожарной безопасности в организациях.',
-    image: 'https://i.ibb.co.com/vvzKxkLc/ptm.jpg',
-    icon: Flame,
-    category: 'Обязательный',
-    color: 'bg-orange-50 text-orange-600',
-  },
-  {
-    id: 2,
-    title: 'Курсы БиОТ (Безопасность и охрана труда)',
-    description: 'Обязательное обучение по безопасности и охране труда для сотрудников всех организаций РК.',
-    image: 'https://i.ibb.co.com/rKc5ztKG/biot.jpg',
-    icon: Shield,
-    category: 'Обязательный',
-    color: 'bg-blue-50 text-blue-600',
-  },
-  {
-    id: 3,
-    title: 'Обучение промышленная безопасность (Промбез)',
-    description: 'Обучение специалистов, работающих на опасных производственных объектах согласно стандартам РК.',
-    image: 'https://i.ibb.co.com/KjYMJq3c/prombez.jpg',
-    icon: HardHat,
-    category: 'Промышленный',
-    color: 'bg-purple-50 text-purple-600',
-  },
-  {
-    id: 4,
-    title: 'Электробезопасность',
-    description: 'Аттестация персонала, работающего с электроустановками и электрооборудованием.',
-    image: 'https://i.ibb.co/vCzhMzxk/electro.jpg',
-    icon: Zap,
-    category: 'Технический',
-    color: 'bg-yellow-50 text-yellow-600',
-  },
+const ICONS = [Flame, Shield, HardHat, Zap];
+const COLORS = ['bg-orange-50 text-orange-600', 'bg-blue-50 text-blue-600', 'bg-purple-50 text-purple-600', 'bg-yellow-50 text-yellow-600'];
+const FALLBACK_COURSES = [
+  { id: 1, title: 'Обучение ПТМ (Пожарно-технический минимум)', description: 'Обучение руководителей и ответственных лиц по пожарной безопасности.', image: 'https://i.ibb.co.com/vvzKxkLc/ptm.jpg', category: 'Обязательный' },
+  { id: 2, title: 'Курсы БиОТ (Безопасность и охрана труда)', description: 'Обязательное обучение по безопасности и охране труда для сотрудников всех организаций РК.', image: 'https://i.ibb.co.com/rKc5ztKG/biot.jpg', category: 'Обязательный' },
+  { id: 3, title: 'Обучение промышленная безопасность (Промбез)', description: 'Обучение специалистов, работающих на опасных производственных объектах.', image: 'https://i.ibb.co.com/KjYMJq3c/prombez.jpg', category: 'Промышленный' },
+  { id: 4, title: 'Электробезопасность', description: 'Аттестация персонала, работающего с электроустановками.', image: 'https://i.ibb.co/vCzhMzxk/electro.jpg', category: 'Технический' },
 ];
 
 export const Courses = () => {
+  const cms = useSection('courses', {} as Record<string, unknown>);
+  const heading = (cms.heading as string) ?? 'Каталог курсов';
+  const subheading = (cms.subheading as string) ?? '';
+  const ctaLabel = (cms.ctaLabel as string) ?? 'Записаться на обучение';
+  const courses = ((cms.items as typeof FALLBACK_COURSES) ?? FALLBACK_COURSES).map((c, i) => ({
+    ...c, icon: ICONS[i] ?? Flame, color: COLORS[i] ?? COLORS[0],
+  }));
   return (
     <section className="py-24 bg-slate-50" id="courses">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,7 +34,7 @@ export const Courses = () => {
             viewport={{ once: true }}
             className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-4"
           >
-            Каталог курсов
+            {heading}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -65,7 +43,7 @@ export const Courses = () => {
             transition={{ delay: 0.1 }}
             className="text-slate-500 text-base md:text-xl max-w-2xl mx-auto"
           >
-            Полностью соответствуют законодательству Республики Казахстан
+            {subheading}
           </motion.p>
           {/* Декоративная линия под заголовком для стиля */}
           <div className="h-1.5 w-20 bg-orange-500 mx-auto mt-6 rounded-full" />
@@ -111,7 +89,7 @@ export const Courses = () => {
                   variant="secondary" 
                   className="w-full py-4 text-base font-bold group/btn shadow-sm hover:shadow-md"
                 >
-                  Записаться на обучение
+                  {ctaLabel}
                   <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                 </Button>
               </div>
