@@ -1,14 +1,22 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { useSection } from '../context/ContentContext';
 
-const steps = [
-  { id: 1, title: 'Заявка', description: 'Оставьте запрос на сайте или свяжитесь с нами для первичной консультации.', color: 'bg-slate-900' },
-  { id: 2, title: 'Консультация', description: 'Анализируем ваши потребности и определяем список обязательных курсов по закону.', color: 'bg-orange-500' },
-  { id: 3, title: 'Обучение', description: 'Доступ к современной онлайн-платформе или проведение выездных лекций.', color: 'bg-slate-900' },
-  { id: 4, title: 'Сертификат', description: 'Получение официального аккредитованного документа, внесенного в реестр.', color: 'bg-green-500' },
+const STEP_COLORS = ['bg-slate-900', 'bg-orange-500', 'bg-slate-900', 'bg-green-500'];
+const FALLBACK_STEPS = [
+  { id: 1, title: 'Заявка', description: 'Оставьте запрос на сайте или свяжитесь с нами.' },
+  { id: 2, title: 'Консультация', description: 'Анализируем ваши потребности и определяем список обязательных курсов.' },
+  { id: 3, title: 'Обучение', description: 'Доступ к современной онлайн-платформе или проведение выездных лекций.' },
+  { id: 4, title: 'Сертификат', description: 'Получение официального аккредитованного документа, внесенного в реестр.' },
 ];
 
 export const Process = () => {
+  const cms = useSection('process', {} as Record<string, unknown>);
+  const heading = (cms.heading as string) ?? 'Как мы работаем';
+  const subheading = (cms.subheading as string) ?? '';
+  const steps = ((cms.steps as typeof FALLBACK_STEPS) ?? FALLBACK_STEPS).map((s, i) => ({
+    ...s, color: STEP_COLORS[i] ?? 'bg-slate-900',
+  }));
   return (
     <section className="py-24 bg-slate-50 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,7 +27,7 @@ export const Process = () => {
             viewport={{ once: true }}
             className="text-4xl font-extrabold text-slate-900"
           >
-            Как мы работаем
+            {heading}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -28,7 +36,7 @@ export const Process = () => {
             transition={{ delay: 0.1 }}
             className="text-slate-500 mt-4 text-lg max-w-2xl mx-auto"
           >
-            Работаем по всей территории Казахстана. Прозрачный и эффективный путь к получению официальных удостоверений.
+            {subheading}
           </motion.p>
         </div>
 
