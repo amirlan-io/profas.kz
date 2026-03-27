@@ -11,7 +11,11 @@ const navLinks = [
   { name: 'Вопросы', href: '#faq' },
 ];
 
-export const Navbar = () => {
+type NavbarProps = {
+  onOpenAdminPanel: () => void;
+};
+
+export const Navbar = ({ onOpenAdminPanel }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
@@ -36,6 +40,22 @@ export const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      return;
+    }
+
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
 
   return (
     <header
@@ -103,50 +123,65 @@ export const Navbar = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[60] bg-slate-900 flex flex-col md:hidden"
+            className="fixed inset-0 z-[120] h-[100dvh] bg-slate-900 md:hidden overflow-hidden"
           >
-            <div className="flex items-center justify-between px-4 h-20 border-b border-white/5 bg-slate-800/50">
-              <a href="#" className="flex items-center ml-4" onClick={() => setIsMobileMenuOpen(false)}>
-                <img 
-                  src="https://image2url.com/r2/default/images/1773946600039-e944154d-8c91-4f2c-9380-ea4f1ae95cf5.png" 
-                  alt="ProfAs.kz" 
-                  className="h-10 md:h-12 w-auto object-contain mix-blend-screen brightness-125 transition-transform hover:scale-105" 
-                />
-              </a>
-              <button
-                className="text-white p-2"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <X className="w-8 h-8" />
-              </button>
-            </div>
-            
-            <div className="flex-grow flex flex-col justify-center px-8 space-y-8 bg-slate-900">
-              {navLinks.map((link, idx) => (
-                <motion.a
-                  key={link.name}
-                  href={link.href}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="text-4xl font-bold text-white hover:text-orange-500 transition-colors"
+            <div className="h-[100dvh] grid grid-rows-[80px,1fr,auto]">
+              <div className="flex items-center justify-between px-4 h-20 border-b border-white/5 bg-slate-800/50">
+                <a href="#" className="flex items-center ml-4" onClick={() => setIsMobileMenuOpen(false)}>
+                  <img 
+                    src="https://image2url.com/r2/default/images/1773946600039-e944154d-8c91-4f2c-9380-ea4f1ae95cf5.png" 
+                    alt="ProfAs.kz" 
+                    className="h-10 md:h-12 w-auto object-contain mix-blend-screen brightness-125 transition-transform hover:scale-105" 
+                  />
+                </a>
+                <button
+                  className="text-white p-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {link.name}
-                </motion.a>
-              ))}
-            </div>
-
-            <div className="p-8 border-t border-white/10">
-              <a
-                href="https://wa.me/77007323366"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-3 bg-orange-500 text-white py-5 rounded-2xl font-bold text-lg shadow-xl shadow-orange-500/20"
-              >
-                <Phone className="w-6 h-6" />
-                WhatsApp поддержка
-              </a>
+                  <X className="w-8 h-8" />
+                </button>
+              </div>
+              
+              <div className="min-h-0 overflow-y-auto px-8 py-8 space-y-8 bg-slate-900">
+                {navLinks.map((link, idx) => (
+                  <motion.a
+                    key={link.name}
+                    href={link.href}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    className="block text-4xl font-bold text-white hover:text-orange-500 transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {link.name}
+                  </motion.a>
+                ))}
+                <motion.button
+                  type="button"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: navLinks.length * 0.1 }}
+                  className="block w-full text-4xl font-bold text-white hover:text-orange-500 transition-colors text-left"
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    onOpenAdminPanel();
+                  }}
+                >
+                  Панель Администратора
+                </motion.button>
+              </div>
+  
+              <div className="p-8 border-t border-white/10 bg-slate-900">
+                <a
+                  href="https://wa.me/77007323366"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-3 bg-orange-500 text-white py-5 rounded-2xl font-bold text-lg shadow-xl shadow-orange-500/20"
+                >
+                  <Phone className="w-6 h-6" />
+                  WhatsApp поддержка
+                </a>
+              </div>
             </div>
           </motion.div>
         )}
