@@ -1,4 +1,5 @@
-const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:4000';
+const rawBase = import.meta.env.VITE_API_URL ?? 'http://localhost:4000';
+const BASE_URL = rawBase.replace(/\/+$/, '');
 
 type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
@@ -11,8 +12,13 @@ async function request<T>(method: HttpMethod, path: string, body?: unknown): Pro
   });
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: res.statusText }));
-    throw Object.assign(new Error(err.error ?? 'Request failed'), { status: res.status });
+    const err = await res.json().catch(() => ({ message: res.statusText }));
+    const errObj = err as { message?: string; error?: string };
+    const message =
+      (typeof errObj.message === 'string' && errObj.message) ||
+      (typeof errObj.error === 'string' && errObj.error) ||
+      res.statusText;
+    throw Object.assign(new Error(message || 'Request failed'), { status: res.status });
   }
 
   return res.json() as Promise<T>;
