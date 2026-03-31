@@ -12,10 +12,10 @@ const navLinks = [
 ];
 
 type NavbarProps = {
-  onOpenAdminPanel: () => void;
+  adminHref?: string;
 };
 
-export const Navbar = ({ onOpenAdminPanel }: NavbarProps) => {
+export const Navbar = ({ adminHref = '/admin' }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
@@ -156,19 +156,16 @@ export const Navbar = ({ onOpenAdminPanel }: NavbarProps) => {
                     {link.name}
                   </motion.a>
                 ))}
-                <motion.button
-                  type="button"
+                <motion.a
+                  href={adminHref}
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: navLinks.length * 0.1 }}
                   className="block w-full text-4xl font-bold text-white hover:text-orange-500 transition-colors text-left"
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    onOpenAdminPanel();
-                  }}
+                  onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Панель Администратора
-                </motion.button>
+                </motion.a>
               </div>
   
               <div className="p-8 border-t border-white/10 bg-slate-900">

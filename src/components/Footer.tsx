@@ -1,11 +1,7 @@
 import React from 'react';
 import { Phone, Mail, MapPin, Globe } from 'lucide-react';
 
-type FooterProps = {
-  onOpenAdminPanel: () => void;
-};
-
-export const Footer = ({ onOpenAdminPanel }: FooterProps) => {
+export const Footer = () => {
   return (
     <footer className="bg-white pt-24 pb-12 border-t border-slate-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -55,15 +51,6 @@ export const Footer = ({ onOpenAdminPanel }: FooterProps) => {
               <li><a href="#" className="hover:text-orange-500 transition-colors">Аккредитация</a></li>
               <li><a href="#" className="hover:text-orange-500 transition-colors">Наши клиенты</a></li>
               <li><a href="#faq" className="hover:text-orange-500 transition-colors">Вопросы и ответы</a></li>
-              <li className="hidden md:block">
-                <button
-                  type="button"
-                  onClick={onOpenAdminPanel}
-                  className="hover:text-orange-500 transition-colors"
-                >
-                  Панель Администратора
-                </button>
-              </li>
               <li className="pt-4 text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                 <Globe className="w-4 h-4" /> Работаем по всей РК
               </li>
