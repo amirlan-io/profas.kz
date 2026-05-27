@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Globe } from 'lucide-react';
 
 export const Footer = () => {
@@ -68,7 +69,18 @@ export const Footer = () => {
           </div>
         </div>
         
-        {/* Весь блок "Нижняя строка" полностью удален */}
+        <div className="pt-8 border-t border-slate-100 text-center space-y-2">
+          <p className="text-slate-500 text-sm leading-relaxed">
+            © 2026 ТОО ProfAs.kz. БИН 130240008315. Деятельность в области систем обеспечения
+            безопасности в Республике Казахстан (ОКЭД 80200). Все права защищены.
+          </p>
+          <Link
+            to="/privacy"
+            className="inline-block text-slate-500 text-sm hover:text-orange-500 transition-colors"
+          >
+            Политика конфиденциальности
+          </Link>
+        </div>
       </div>
     </footer>
   );

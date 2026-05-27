@@ -24,9 +24,8 @@ export const Hero = () => {
               Аккредитованный учебный центр
             </span>
             
-            {/* SEO-оптимизированный заголовок с ВЧ-запросом */}
             <h1 className="text-3xl sm:text-5xl lg:text-7xl font-extrabold text-white leading-tight mb-6">
-              Профессиональная сертификация и <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-400">обучение промышленной безопасности</span>
+              Системы безопасности и <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-400">видеонаблюдение в Алматы</span>
             </h1>
             
             {/* SEO-оптимизированное описание с ключевыми словами */}

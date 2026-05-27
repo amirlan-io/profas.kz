@@ -16,6 +16,7 @@ import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 import { SuperadminUsersPanel } from './components/SuperadminUsersPanel';
 import { ContentAdminPanel } from './components/ContentAdminPanel';
+import { PrivacyPage } from './pages/PrivacyPage';
 import { ContentProvider, useContentReload } from './context/ContentContext';
 import { authApi } from './lib/api';
 
@@ -213,6 +214,7 @@ export default function App() {
     <ContentProvider>
       <Routes>
         <Route path="/" element={<SiteContent />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

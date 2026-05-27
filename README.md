@@ -1,20 +1,38 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# ProfAs.kz — frontend
 
-# Run and deploy your AI Studio app
+Лендинг и клиентская часть CMS (React + Vite). Бэкенд вынесен отдельно.
 
-This contains everything you need to run your app locally.
+## Локальный запуск
 
-View your app in AI Studio: https://ai.studio/apps/bc524853-29a6-4d7e-9e8d-e19ee971f071
+1. **Node.js** 18+
+2. Зависимости: `npm install`
+3. Скопируйте переменные окружения (без секретов, только публичный URL API):
 
-## Run Locally
+   ```bash
+   cp .env.example .env.local
+   ```
 
-**Prerequisites:**  Node.js
+   Отредактируйте `VITE_API_URL` при необходимости (без слэша в конце).
 
+4. Запуск: `npm run dev`
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Секреты и публичный репозиторий
+
+- В репозиторий коммитьте только **`.env.example`** с плейсхолдерами.
+- Файлы **`.env`**, **`.env.local`** и любые варианты с реальными значениями уже в **`.gitignore`** — не добавляйте их в git.
+- Переменные с префиксом **`VITE_`** попадают в собираемый фронтенд-бандл. Туда допустимо класть только **публичные** данные (например, базовый URL вашего бэкенда). **Приватные API-ключи** в `VITE_*` класть нельзя — их увидит любой, кто откроет сайт.
+- Продакшен: задайте переменные в **Vercel → Project → Settings → Environment Variables**, не в коде.
+
+Если ключ или пароль когда-либо уже попал в историю git — **смените ключ на стороне сервиса** и при необходимости очистите историю коммитов (например, `git filter-repo`); одного удаления файла в новом коммите недостаточно.
+
+## Сборка
+
+```bash
+npm run build
+npm run preview
+```
+
+## Маршруты
+
+- `/` — основной сайт  
+- `/admin` — панель администратора (для продакшена на Vercel нужен `vercel.json` с rewrite на `index.html`).
