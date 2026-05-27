@@ -24,12 +24,14 @@ export const Hero = () => {
               Аккредитованный учебный центр
             </span>
             
-            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-extrabold text-white leading-tight mb-6">
-              Системы безопасности и <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-400">видеонаблюдение в Алматы</span>
+            <h1 className="text-[clamp(1.75rem,4.5vw,4.5rem)] font-extrabold text-white leading-tight mb-6 px-1">
+              Системы безопасности и{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-400">
+                видеонаблюдение в Алматы
+              </span>
             </h1>
-            
-            {/* SEO-оптимизированное описание с ключевыми словами */}
-            <p className="text-xl lg:text-2xl text-slate-400 font-light leading-relaxed max-w-3xl mx-auto mb-10">
+
+            <p className="text-base sm:text-lg lg:text-xl text-slate-400 font-light leading-relaxed max-w-3xl mx-auto mb-10 px-2">
               Профильный центр, где доступно профессиональное обучение ПТМ, специализированные курсы БиОТ и полная подготовка специалистов по безопасности в РК.
             </p>
             
@@ -50,25 +52,25 @@ export const Hero = () => {
                   <div className="bg-orange-500/20 p-1 rounded-full">
                     <CheckCircle2 className="w-5 h-5 text-orange-500" />
                   </div>
-                  <span className="text-lg lg:text-xl font-medium">{item}</span>
+                  <span className="text-base sm:text-lg font-medium text-center sm:text-left">{item}</span>
                 </motion.div>
               ))}
             </div>
 
             {/* Кнопки с обработчиками прокрутки */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-              <Button 
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-16 w-full max-w-md sm:max-w-none mx-auto px-2">
+              <Button
                 onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
-                size="lg" 
-                className="px-10 py-5 text-xl bg-orange-500 hover:bg-orange-600 text-white"
+                size="lg"
+                className="w-full sm:w-auto px-8 text-base sm:text-lg bg-orange-500 hover:bg-orange-600 text-white"
               >
                 Начать обучение
               </Button>
-              <Button 
+              <Button
                 onClick={() => document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' })}
-                variant="outline" 
-                size="lg" 
-                className="px-10 py-5 text-xl text-white border-white/20 hover:bg-white/10"
+                variant="outline"
+                size="lg"
+                className="w-full sm:w-auto px-8 text-base sm:text-lg text-white border-white/20 hover:bg-white/10"
               >
                 Посмотреть курсы
               </Button>

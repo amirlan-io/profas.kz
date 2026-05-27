@@ -11,7 +11,7 @@ import { Process } from './components/Process';
 import { Accreditation } from './components/Accreditation';
 import { FAQ } from './components/FAQ';
 import { Reviews } from './components/Reviews';
-import { FloatingWhatsApp } from './components/FloatingWhatsApp';
+import { FloatingWidgets } from './components/FloatingWidgets';
 import { FinalCTA } from './components/FinalCTA';
 import { Footer } from './components/Footer';
 import { SuperadminUsersPanel } from './components/SuperadminUsersPanel';
@@ -19,7 +19,6 @@ import { ContentAdminPanel } from './components/ContentAdminPanel';
 import { PrivacyPage } from './pages/PrivacyPage';
 import { LearnPage } from './pages/LearnPage';
 import { LearningHub } from './components/edtech/LearningHub';
-import { AiTutor } from './components/edtech/AiTutor';
 import { ContentProvider, useContentReload } from './context/ContentContext';
 import { authApi } from './lib/api';
 
@@ -51,8 +50,7 @@ function SiteContent() {
       <FAQ />
       <FinalCTA />
       <Footer />
-      <FloatingWhatsApp />
-      <AiTutor />
+      <FloatingWidgets />
     </div>
   );
 }

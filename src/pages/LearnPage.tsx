@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { MicroStories } from '../components/edtech/MicroStories';
 import { MicroQuiz } from '../components/edtech/MicroQuiz';
 import { DailyStreak } from '../components/edtech/DailyStreak';
-import { AiTutor } from '../components/edtech/AiTutor';
+import { FloatingWidgets } from '../components/FloatingWidgets';
 import { CourseCardSkeleton } from '../components/ui/Skeleton';
 import { recordLearningActivity } from '@/src/lib/streak';
 
@@ -93,7 +93,7 @@ export function LearnPage() {
         </section>
       </main>
 
-      <AiTutor />
+      <FloatingWidgets />
     </div>
   );
 }

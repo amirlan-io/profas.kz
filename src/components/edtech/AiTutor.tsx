@@ -23,12 +23,24 @@ const WELCOME: ChatMessage = {
 };
 
 type AiTutorProps = {
-  /** Plug your LLM API here */
   onSendMessage?: (message: string, history: ChatMessage[]) => Promise<string>;
+  /** Controlled open state */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  /** Hide built-in FAB — use with FloatingActions */
+  hideFab?: boolean;
 };
 
-export function AiTutor({ onSendMessage }: AiTutorProps) {
-  const [open, setOpen] = useState(false);
+export function AiTutor({
+  onSendMessage,
+  open: controlledOpen,
+  onOpenChange,
+  hideFab = false,
+}: AiTutorProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const open = controlledOpen ?? internalOpen;
+  const setOpen = onOpenChange ?? setInternalOpen;
+
   const [messages, setMessages] = useState<ChatMessage[]>([WELCOME]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -101,8 +113,8 @@ export function AiTutor({ onSendMessage }: AiTutorProps) {
               exit={{ y: '100%' }}
               transition={{ type: 'spring', damping: 28, stiffness: 320 }}
               className={cn(
-                'fixed z-[210] inset-x-0 bottom-0 md:inset-auto md:right-6 md:bottom-24',
-                'md:w-[400px] md:max-h-[min(560px,80vh)] md:rounded-3xl',
+                'fixed z-[210] inset-x-0 bottom-0 md:inset-auto md:right-6',
+                'md:bottom-[8.5rem] md:w-[400px] md:max-h-[min(560px,80vh)] md:rounded-3xl',
                 'bg-white rounded-t-3xl shadow-2xl border border-slate-200',
                 'flex flex-col max-h-[min(85vh,640px)]'
               )}
@@ -196,23 +208,25 @@ export function AiTutor({ onSendMessage }: AiTutorProps) {
         )}
       </AnimatePresence>
 
-      <motion.button
-        type="button"
-        onClick={() => setOpen(true)}
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        className={cn(
-          'fixed z-[190] bottom-4 right-4 md:bottom-6 md:right-6',
-          'min-h-12 min-w-12 p-4 rounded-full',
-          'bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-xl shadow-orange-500/30',
-          'flex items-center justify-center',
-          'active:scale-95 transition-transform'
-        )}
-        aria-label="Открыть AI Тьютор"
-      >
-        <Bot className="w-7 h-7" />
-        <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white" />
-      </motion.button>
+      {!hideFab && (
+        <motion.button
+          type="button"
+          onClick={() => setOpen(true)}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          className={cn(
+            'fixed z-[190] bottom-4 right-4 md:bottom-6 md:right-6',
+            'min-h-12 min-w-12 p-4 rounded-full',
+            'bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-xl shadow-orange-500/30',
+            'flex items-center justify-center',
+            'active:scale-95 transition-transform'
+          )}
+          aria-label="Открыть AI Тьютор"
+        >
+          <Bot className="w-7 h-7" />
+          <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white" />
+        </motion.button>
+      )}
     </>
   );
 }
