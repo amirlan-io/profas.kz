@@ -27,11 +27,15 @@ export function tutorDevApiPlugin(): Plugin {
         });
         req.on('end', () => {
           void (async () => {
-            const apiKey = process.env.OPENAI_API_KEY;
+            const apiKey = process.env.GEMINI_API_KEY;
             if (!apiKey) {
               res.statusCode = 503;
               res.setHeader('Content-Type', 'application/json');
-              res.end(JSON.stringify({ error: 'OPENAI_API_KEY не задан в .env.local' }));
+              res.end(
+                JSON.stringify({
+                  error: 'GEMINI_API_KEY не задан в .env.local (бесплатно: aistudio.google.com/apikey)',
+                })
+              );
               return;
             }
 
@@ -52,7 +56,7 @@ export function tutorDevApiPlugin(): Plugin {
                 message,
                 body.history ?? [],
                 apiKey,
-                process.env.OPENAI_MODEL
+                process.env.GEMINI_MODEL
               );
               res.statusCode = 200;
               res.setHeader('Content-Type', 'application/json');

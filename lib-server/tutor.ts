@@ -5,39 +5,51 @@ const SYSTEM_PROMPT = `Ты — AI-тьютор учебного центра Т
 Отвечай на русском языке, кратко и по делу (2–4 абзаца максимум).
 Если вопрос не по теме обучения — вежливо перенаправь к теме курсов ProfAs.kz.`;
 
+/** Google Gemini — бесплатный тариф: https://aistudio.google.com/apikey */
 export async function runTutorChat(
   message: string,
   history: ChatTurn[],
   apiKey: string,
-  model = 'gpt-4o-mini'
+  model = 'gemini-2.0-flash'
 ): Promise<string> {
-  const openaiRes = await fetch('https://api.openai.com/v1/chat/completions', {
+  const contents = [
+    ...history.slice(-10).map((m) => ({
+      role: m.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: m.content }],
+    })),
+    { role: 'user', parts: [{ text: message }] },
+  ];
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+  const geminiRes = await fetch(url, {
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model,
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        ...history.slice(-10).map((m) => ({ role: m.role, content: m.content })),
-        { role: 'user', content: message },
-      ],
-      max_tokens: 800,
-      temperature: 0.7,
+      systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+      contents,
+      generationConfig: {
+        temperature: 0.7,
+        maxOutputTokens: 800,
+      },
     }),
   });
 
-  if (!openaiRes.ok) {
-    const errText = await openaiRes.text();
-    throw new Error(`OpenAI ${openaiRes.status}: ${errText.slice(0, 200)}`);
+  if (!geminiRes.ok) {
+    const errText = await geminiRes.text();
+    throw new Error(`Gemini ${geminiRes.status}: ${errText.slice(0, 300)}`);
   }
 
-  const data = (await openaiRes.json()) as {
-    choices?: { message?: { content?: string } }[];
+  const data = (await geminiRes.json()) as {
+    candidates?: { content?: { parts?: { text?: string }[] } }[];
+    error?: { message?: string };
   };
-  const reply = data.choices?.[0]?.message?.content?.trim();
+
+  if (data.error?.message) {
+    throw new Error(data.error.message);
+  }
+
+  const reply = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
   if (!reply) throw new Error('Empty AI response');
   return reply;
 }
