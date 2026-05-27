@@ -5,7 +5,6 @@ import { cn } from '@/src/lib/utils';
 
 const navLinks = [
   { name: 'Главная', href: '#' },
-  { name: 'Обучение', href: '#learn' },
   { name: 'Курсы', href: '#courses' },
   { name: 'Для кого', href: '#audience' },
   { name: 'Преимущества', href: '#why-us' },

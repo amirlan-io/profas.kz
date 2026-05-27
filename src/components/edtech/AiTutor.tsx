@@ -70,23 +70,21 @@ export function AiTutor({
     setLoading(true);
 
     try {
-      let reply: string;
-      if (onSendMessage) {
-        reply = await onSendMessage(trimmed, [...messages, userMsg]);
-      } else {
-        await new Promise((r) => setTimeout(r, 600));
-        reply = getStubReply(trimmed);
+      if (!onSendMessage) {
+        throw new Error('AI не настроен');
       }
+      const reply = await onSendMessage(trimmed, [...messages, userMsg]);
       appendMessage({
         id: `a-${Date.now()}`,
         role: 'assistant',
         content: reply,
       });
-    } catch {
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Не удалось получить ответ';
       appendMessage({
         id: `e-${Date.now()}`,
         role: 'assistant',
-        content: 'Не удалось получить ответ. Повторите попытку позже.',
+        content: `⚠️ ${msg}. Проверьте OPENAI_API_KEY в настройках Vercel.`,
       });
     } finally {
       setLoading(false);
@@ -229,18 +227,4 @@ export function AiTutor({
       )}
     </>
   );
-}
-
-function getStubReply(prompt: string): string {
-  const lower = prompt.toLowerCase();
-  if (lower.includes('проще') || lower.includes('simpler')) {
-    return 'Упрощённо: пожарная безопасность — это правила, которые помогают предотвратить пожар и правильно эвакуироваться. На курсе ПТМ вы получите пошаговый алгоритм для вашей должности.';
-  }
-  if (lower.includes('пример') || lower.includes('example')) {
-    return 'Пример: на складе ответственный за ПТМ проверяет огнетушители раз в месяц, ведёт журнал и проводит инструктаж новых сотрудников в первый рабочий день.';
-  }
-  if (lower.includes('проверь') || lower.includes('test')) {
-    return 'Давайте проверим: как часто нужно проходить обучение БиОТ? Напишите ответ — я подскажу, верно ли.';
-  }
-  return 'Отличный вопрос! После подключения API я смогу давать персонализированные ответы по вашему курсу. Пока рекомендую пройти микро-квиз ниже на странице обучения.';
 }
