@@ -17,6 +17,9 @@ import { Footer } from './components/Footer';
 import { SuperadminUsersPanel } from './components/SuperadminUsersPanel';
 import { ContentAdminPanel } from './components/ContentAdminPanel';
 import { PrivacyPage } from './pages/PrivacyPage';
+import { LearnPage } from './pages/LearnPage';
+import { LearningHub } from './components/edtech/LearningHub';
+import { AiTutor } from './components/edtech/AiTutor';
 import { ContentProvider, useContentReload } from './context/ContentContext';
 import { authApi } from './lib/api';
 
@@ -36,6 +39,7 @@ function SiteContent() {
     <div className="min-h-screen bg-slate-50 selection:bg-orange-500 selection:text-white">
       <Navbar />
       <Hero />
+      <LearningHub />
       <Stats />
       <Audience />
       <Courses />
@@ -48,6 +52,7 @@ function SiteContent() {
       <FinalCTA />
       <Footer />
       <FloatingWhatsApp />
+      <AiTutor />
     </div>
   );
 }
@@ -215,6 +220,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<SiteContent />} />
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/learn" element={<LearnPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

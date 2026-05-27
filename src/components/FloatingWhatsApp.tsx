@@ -16,7 +16,7 @@ export const FloatingWhatsApp = () => {
       animate={{ scale: 1, opacity: 1 }}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.9 }}
-      className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[999] bg-[#25D366] text-white p-3 md:p-4 rounded-full shadow-2xl flex items-center justify-center group"
+      className="fixed bottom-4 left-4 md:left-auto md:right-6 md:bottom-6 z-[180] min-h-12 min-w-12 bg-[#25D366] text-white p-3 md:p-4 rounded-full shadow-2xl flex items-center justify-center group active:scale-95 transition-transform"
       aria-label="Связаться в WhatsApp"
     >
       <div className="absolute right-full mr-4 bg-white text-slate-900 px-4 py-2 rounded-xl text-sm font-bold shadow-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none border border-slate-100">
