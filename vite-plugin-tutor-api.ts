@@ -1,6 +1,7 @@
 import type { Plugin } from 'vite';
 import { config as loadEnv } from 'dotenv';
-import { runTutor, type ChatTurn } from './lib-server/tutor-engine';
+import { validateTutorPayload } from './api/_lib/security';
+import { runTutor } from './lib-server/tutor-engine';
 
 export function tutorDevApiPlugin(): Plugin {
   return {
@@ -27,19 +28,16 @@ export function tutorDevApiPlugin(): Plugin {
         req.on('end', () => {
           void (async () => {
             try {
-              const body = JSON.parse(raw || '{}') as {
-                message?: string;
-                history?: ChatTurn[];
-              };
-              const message = body.message?.trim();
-              if (!message) {
+              const body = JSON.parse(raw || '{}') as unknown;
+              const parsed = validateTutorPayload(body);
+              if (!parsed) {
                 res.statusCode = 400;
                 res.setHeader('Content-Type', 'application/json');
-                res.end(JSON.stringify({ error: 'Сообщение пустое' }));
+                res.end(JSON.stringify({ error: 'Некорректный запрос' }));
                 return;
               }
 
-              const reply = await runTutor(message, body.history ?? [], {
+              const reply = await runTutor(parsed.message, parsed.history, {
                 groqApiKey: process.env.GROQ_API_KEY,
                 geminiApiKey: process.env.GEMINI_API_KEY,
                 groqModel: process.env.GROQ_MODEL,

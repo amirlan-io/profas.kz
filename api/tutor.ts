@@ -1,6 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-
-type ChatTurn = { role: 'user' | 'assistant'; content: string };
+import { applyCors, parseAndValidateBody, safeErrorMessage, type ChatTurn } from './_lib/security';
 
 const SYSTEM_PROMPT = `Ты — AI-помощник учебного центра ТОО ProfAs.kz (Казахстан).
 Помогаешь с курсами: ПТМ (пожарная безопасность), БиОТ (охрана труда), промышленная безопасность, электробезопасность, ДОПОГ.
@@ -21,7 +20,7 @@ async function callGroq(
 ): Promise<string> {
   const messages = [
     { role: 'system' as const, content: SYSTEM_PROMPT },
-    ...history.slice(-10).map((m) => ({
+    ...history.map((m) => ({
       role: m.role as 'user' | 'assistant',
       content: m.content,
     })),
@@ -50,7 +49,7 @@ async function callGroq(
   try {
     data = JSON.parse(raw) as typeof data;
   } catch {
-    throw new Error(`Groq parse: ${raw.slice(0, 150)}`);
+    throw new Error('Groq response parse error');
   }
 
   if (!res.ok) {
@@ -58,7 +57,7 @@ async function callGroq(
   }
 
   const reply = data.choices?.[0]?.message?.content?.trim();
-  if (!reply) throw new Error('Пустой ответ от Groq');
+  if (!reply) throw new Error('Empty Groq response');
   return reply;
 }
 
@@ -69,7 +68,7 @@ async function callGemini(
   model: string
 ): Promise<string> {
   const contents = [
-    ...history.slice(-10).map((m) => ({
+    ...history.map((m) => ({
       role: m.role === 'assistant' ? 'model' : 'user',
       parts: [{ text: m.content }],
     })),
@@ -96,7 +95,7 @@ async function callGemini(
   try {
     data = JSON.parse(raw) as typeof data;
   } catch {
-    throw new Error(`Gemini parse: ${raw.slice(0, 150)}`);
+    throw new Error('Gemini response parse error');
   }
 
   if (!res.ok) {
@@ -104,7 +103,7 @@ async function callGemini(
   }
 
   const reply = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
-  if (!reply) throw new Error('Пустой ответ от Gemini');
+  if (!reply) throw new Error('Empty Gemini response');
   return reply;
 }
 
@@ -115,7 +114,6 @@ async function runTutor(message: string, history: ChatTurn[]): Promise<string> {
   const geminiModels = [
     process.env.GEMINI_MODEL?.trim() || 'gemini-2.0-flash-lite',
     'gemini-2.0-flash',
-    'gemini-1.5-flash-8b',
   ].filter((m, i, a) => a.indexOf(m) === i);
 
   const errors: string[] = [];
@@ -124,20 +122,20 @@ async function runTutor(message: string, history: ChatTurn[]): Promise<string> {
     try {
       return await callGroq(message, history, groqKey, groqModel);
     } catch (e) {
-      errors.push(`Groq: ${e instanceof Error ? e.message : String(e)}`);
+      errors.push(e instanceof Error ? e.message : String(e));
     }
   }
 
   if (geminiKey) {
     for (const model of geminiModels) {
-      for (let attempt = 0; attempt < 3; attempt++) {
+      for (let attempt = 0; attempt < 2; attempt++) {
         try {
           return await callGemini(message, history, geminiKey, model);
         } catch (e) {
           const msg = e instanceof Error ? e.message : String(e);
-          errors.push(`Gemini(${model}): ${msg}`);
-          if (isQuotaError(msg) && attempt < 2) {
-            await sleep(4000 * (attempt + 1));
+          errors.push(msg);
+          if (isQuotaError(msg) && attempt < 1) {
+            await sleep(3000);
             continue;
           }
           if (!isQuotaError(msg)) break;
@@ -147,34 +145,31 @@ async function runTutor(message: string, history: ChatTurn[]): Promise<string> {
   }
 
   if (!groqKey && !geminiKey) {
-    throw new Error('AI не настроен. Добавьте GROQ_API_KEY в Vercel.');
+    throw new Error('AI keys not configured');
   }
 
-  throw new Error(errors[errors.length - 1] ?? 'Не удалось получить ответ от AI');
+  throw new Error(errors[errors.length - 1] ?? 'AI unavailable');
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Cache-Control', 'no-store');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
 
-  if (req.method === 'OPTIONS') return res.status(204).end();
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+  if (applyCors(req, res)) return;
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
-  const body =
-    typeof req.body === 'string'
-      ? (JSON.parse(req.body) as { message?: string; history?: ChatTurn[] })
-      : (req.body as { message?: string; history?: ChatTurn[] });
-
-  const message = body.message?.trim();
-  if (!message) return res.status(400).json({ error: 'Сообщение пустое' });
+  const parsed = parseAndValidateBody(req);
+  if (!parsed) {
+    return res.status(400).json({ error: 'Некорректный запрос' });
+  }
 
   try {
-    const reply = await runTutor(message, body.history ?? []);
+    const reply = await runTutor(parsed.message, parsed.history);
     return res.status(200).json({ reply });
   } catch (err) {
-    const msg = err instanceof Error ? err.message : 'Ошибка AI';
-    console.error('Tutor API:', msg);
-    return res.status(502).json({ error: msg });
+    console.error('Tutor API:', err instanceof Error ? err.message : err);
+    return res.status(502).json({ error: safeErrorMessage(err) });
   }
 }

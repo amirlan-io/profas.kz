@@ -11,11 +11,7 @@ const navLinks = [
   { name: 'Вопросы', href: '#faq' },
 ];
 
-type NavbarProps = {
-  adminHref?: string;
-};
-
-export const Navbar = ({ adminHref = '/admin' }: NavbarProps) => {
+export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('');
@@ -156,16 +152,6 @@ export const Navbar = ({ adminHref = '/admin' }: NavbarProps) => {
                     {link.name}
                   </motion.a>
                 ))}
-                <motion.a
-                  href={adminHref}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: navLinks.length * 0.05 }}
-                  className="block py-3 text-lg font-semibold text-slate-400 hover:text-orange-500"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Панель администратора
-                </motion.a>
               </div>
 
               <div className="p-6 border-t border-white/10">

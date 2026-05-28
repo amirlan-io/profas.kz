@@ -61,7 +61,7 @@ function AdminPage() {
   const [isCheckingSession, setIsCheckingSession] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem(ADMIN_STORAGE_KEY);
+    const stored = sessionStorage.getItem(ADMIN_STORAGE_KEY);
     if (!stored) {
       setIsCheckingSession(false);
       return;
@@ -74,11 +74,11 @@ function AdminPage() {
           setAdminUser(parsed);
         })
         .catch(() => {
-          localStorage.removeItem(ADMIN_STORAGE_KEY);
+          sessionStorage.removeItem(ADMIN_STORAGE_KEY);
         })
         .finally(() => setIsCheckingSession(false));
     } catch {
-      localStorage.removeItem(ADMIN_STORAGE_KEY);
+      sessionStorage.removeItem(ADMIN_STORAGE_KEY);
       setIsCheckingSession(false);
     }
   }, []);
@@ -92,7 +92,7 @@ function AdminPage() {
       const user = (res as { user?: AuthUser }).user;
       if (!user) throw new Error('Не удалось войти');
       setAdminUser(user);
-      localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(user));
+      sessionStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(user));
       setPassword('');
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Ошибка входа';
@@ -108,7 +108,7 @@ function AdminPage() {
     } catch {
       // Ignore server logout errors and clear local session anyway.
     } finally {
-      localStorage.removeItem(ADMIN_STORAGE_KEY);
+      sessionStorage.removeItem(ADMIN_STORAGE_KEY);
       setAdminUser(null);
       setLogin('');
       setPassword('');
