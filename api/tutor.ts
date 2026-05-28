@@ -77,14 +77,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const message = body.message?.trim();
   if (!message) return res.status(400).json({ error: 'Сообщение пустое' });
 
-  const model = process.env.GEMINI_MODEL?.trim() || 'gemini-2.0-flash';
+  const preferred = process.env.GEMINI_MODEL?.trim() || 'gemini-2.0-flash-lite';
+  const fallbacks = ['gemini-2.0-flash-lite', 'gemini-2.0-flash', 'gemini-1.5-flash-8b'];
+  const models = [preferred, ...fallbacks.filter((m) => m !== preferred)];
 
-  try {
-    const reply = await callGemini(message, body.history ?? [], apiKey, model);
-    return res.status(200).json({ reply });
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : 'Unknown error';
-    console.error('Tutor API:', msg);
-    return res.status(502).json({ error: msg });
+  let lastError = 'Неизвестная ошибка';
+  for (const model of models) {
+    try {
+      const reply = await callGemini(message, body.history ?? [], apiKey, model);
+      return res.status(200).json({ reply });
+    } catch (err) {
+      lastError = err instanceof Error ? err.message : String(err);
+      const isQuota = /quota|rate|limit|429/i.test(lastError);
+      if (!isQuota) break;
+    }
   }
+
+  const friendly = /quota|rate|limit/i.test(lastError)
+    ? 'Исчерпан бесплатный лимит Gemini. Создайте новый ключ на aistudio.google.com/apikey или подождите ~1 минуту.'
+    : lastError;
+
+  console.error('Tutor API:', lastError);
+  return res.status(502).json({ error: friendly });
 }
