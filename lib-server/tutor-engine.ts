@@ -41,7 +41,10 @@ async function callGroq(
   });
 
   const raw = await res.text();
-  let data: { choices?: { message?: { content?: string } }[] }; error?: { message?: string } };
+  let data: {
+    choices?: { message?: { content?: string } }[];
+    error?: { message?: string };
+  };
   try {
     data = JSON.parse(raw);
   } catch {
