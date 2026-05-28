@@ -19,7 +19,7 @@ export function AiTutorFab({ onClick, className }: AiTutorFabProps) {
         'active:scale-95 transition-transform hover:scale-105',
         className
       )}
-      aria-label="Открыть AI Тьютор"
+      aria-label="Открыть AI помощник"
     >
       <Bot className="w-7 h-7" />
       <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-green-400 rounded-full border-2 border-white" />

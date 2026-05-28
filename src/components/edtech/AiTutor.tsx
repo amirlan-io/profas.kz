@@ -19,7 +19,7 @@ const WELCOME: ChatMessage = {
   id: 'welcome',
   role: 'assistant',
   content:
-    'Привет! Я AI-тьютор ProfAs.kz. Готов помочь с курсами ПТМ, БиОТ и промбезопасности. Выберите быстрый вопрос или напишите свой.',
+    'Привет! Я AI-помощник ProfAs.kz. Готов помочь с курсами ПТМ, БиОТ и промбезопасности. Выберите быстрый вопрос или напишите свой.',
 };
 
 type AiTutorProps = {
@@ -117,7 +117,7 @@ export function AiTutor({
                 'flex flex-col max-h-[min(85vh,640px)]'
               )}
               role="dialog"
-              aria-label="AI Тьютор"
+              aria-label="AI помощник"
             >
               <header className="flex items-center justify-between gap-3 px-4 py-3 border-b border-slate-100 shrink-0">
                 <div className="flex items-center gap-3 min-h-12">
@@ -125,7 +125,7 @@ export function AiTutor({
                     <Bot className="w-5 h-5" />
                   </div>
                   <div>
-                    <p className="font-bold text-slate-900">AI Тьютор</p>
+                    <p className="font-bold text-slate-900">AI помощник</p>
                     <p className="text-xs text-slate-500">ProfAs.kz · beta</p>
                   </div>
                 </div>
@@ -187,7 +187,7 @@ export function AiTutor({
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    placeholder="Спросите AI-тьютора…"
+                    placeholder="Спросите AI-помощника…"
                     className="flex-1 min-h-12 rounded-xl border border-slate-200 px-4 text-sm outline-none focus:border-orange-500"
                     disabled={loading}
                   />
@@ -219,7 +219,7 @@ export function AiTutor({
             'flex items-center justify-center',
             'active:scale-95 transition-transform'
           )}
-          aria-label="Открыть AI Тьютор"
+          aria-label="Открыть AI помощник"
         >
           <Bot className="w-7 h-7" />
           <span className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white" />
