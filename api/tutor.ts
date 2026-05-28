@@ -77,7 +77,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const message = body.message?.trim();
   if (!message) return res.status(400).json({ error: 'Сообщение пустое' });
 
-  const model = process.env.GEMINI_MODEL?.trim() || 'gemini-1.5-flash';
+  const model = process.env.GEMINI_MODEL?.trim() || 'gemini-2.0-flash';
 
   try {
     const reply = await callGemini(message, body.history ?? [], apiKey, model);
