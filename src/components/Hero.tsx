@@ -3,119 +3,142 @@ import { motion } from 'motion/react';
 import { CheckCircle2, ShieldCheck } from 'lucide-react';
 import { Button } from './ui/Button';
 
+const HERO_GRADIENT = 'linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.65))';
+const BG_MOBILE = '/images/hero/bg-mobile.png';
+const BG_DESKTOP = '/images/hero/bg-desktop.png';
+
+const benefits = [
+  'Официальные удостоверения установленного образца',
+  'Онлайн и очное обучение по всему Казахстану',
+  'Получение документов в течение 24 часов',
+];
+
 export const Hero = () => {
   return (
-    <section className="pt-32 pb-20 lg:pt-48 lg:pb-32 bg-slate-950 overflow-hidden relative min-h-screen flex items-center">
-      {/* Background Decor */}
-      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-[600px] h-[600px] bg-orange-500/10 rounded-full blur-[120px]" />
-      <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[100px]" />
-      
-      {/* Дополнительные декоративные элементы для премиальности */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange-500/5 rounded-full blur-[150px]" />
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <span className="inline-block py-1 px-4 rounded-full bg-orange-500/10 text-orange-500 text-xs font-bold tracking-widest uppercase mb-8 border border-orange-500/20">
-              Аккредитованный учебный центр
-            </span>
-            
-            <h1 className="text-[clamp(1.75rem,4.5vw,4.5rem)] font-extrabold text-white leading-tight mb-6 px-1">
-              Системы безопасности и{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-400">
-                видеонаблюдение в Алматы
-              </span>
-            </h1>
+    <section
+      id="home"
+      className="relative min-h-[100dvh] flex flex-col justify-end overflow-hidden pt-24 pb-10 sm:pt-28 sm:pb-14 lg:pt-32 lg:pb-20 lg:justify-center"
+    >
+      {/* Mobile background */}
+      <div
+        className="absolute inset-0 lg:hidden bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `${HERO_GRADIENT}, url(${BG_MOBILE})`,
+        }}
+        aria-hidden
+      />
+      {/* Desktop background */}
+      <div
+        className="absolute inset-0 hidden lg:block bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `${HERO_GRADIENT}, url(${BG_DESKTOP})`,
+        }}
+        aria-hidden
+      />
 
-            <p className="text-base sm:text-lg lg:text-xl text-slate-400 font-light leading-relaxed max-w-3xl mx-auto mb-10 px-2">
-              Профильный центр, где доступно профессиональное обучение ПТМ, специализированные курсы БиОТ и полная подготовка специалистов по безопасности в РК.
-            </p>
-            
-            {/* Блок преимуществ сразу после текста */}
-            <div className="flex flex-col items-center gap-4 mb-12">
-              {[
-                "Официальные удостоверения установленного образца",
-                "Онлайн и очное обучение по всему Казахстану",
-                "Получение документов в течение 24 часов"
-              ].map((item) => (
-                <motion.div 
-                  key={item} 
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2 + 0.1 * item.length }}
-                  className="flex items-center gap-3 text-slate-200"
-                >
-                  <div className="bg-orange-500/20 p-1 rounded-full">
-                    <CheckCircle2 className="w-5 h-5 text-orange-500" />
-                  </div>
-                  <span className="text-base sm:text-lg font-medium text-center sm:text-left">{item}</span>
-                </motion.div>
-              ))}
-            </div>
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="max-w-4xl mx-auto text-center lg:text-center"
+        >
+          <span className="inline-block mb-5 sm:mb-6 px-4 py-2 rounded-full text-[10px] sm:text-xs font-bold tracking-[0.15em] uppercase text-orange-400 bg-black/50 border border-[#FF6B00]">
+            Аккредитованный учебный центр
+          </span>
 
-            {/* Кнопки с обработчиками прокрутки */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center mb-16 w-full max-w-md sm:max-w-none mx-auto px-2">
-              <Button
-                onClick={() => document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })}
-                size="lg"
-                className="w-full sm:w-auto px-8 text-base sm:text-lg bg-orange-500 hover:bg-orange-600 text-white"
+          <h1 className="font-extrabold leading-[1.15] mb-5 sm:mb-6 text-[clamp(1.625rem,6.5vw,3.75rem)]">
+            <span className="block text-white">Системы безопасности и</span>
+            <span className="block text-[#FF6B00] mt-1">видеонаблюдение в Алматы</span>
+          </h1>
+
+          <p className="text-sm sm:text-base lg:text-lg text-slate-300/95 font-light leading-relaxed max-w-lg mx-auto mb-8 sm:mb-10 px-1">
+            Профильный центр: обучение ПТМ, курсы БиОТ и подготовка специалистов по безопасности
+            в Республике Казахстан.
+          </p>
+
+          <ul className="flex flex-col items-stretch sm:items-center gap-3 mb-8 sm:mb-10 max-w-md mx-auto lg:max-w-xl">
+            {benefits.map((item, i) => (
+              <motion.li
+                key={item}
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.15 + i * 0.08 }}
+                className="flex items-start sm:items-center gap-3 text-left sm:text-center text-slate-200"
               >
-                Начать обучение
-              </Button>
-              <Button
-                onClick={() => document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' })}
-                variant="outline"
-                size="lg"
-                className="w-full sm:w-auto px-8 text-base sm:text-lg text-white border-white/20 hover:bg-white/10"
-              >
-                Посмотреть курсы
-              </Button>
-            </div>
+                <span className="shrink-0 mt-0.5 sm:mt-0 flex h-8 w-8 items-center justify-center rounded-full bg-[#FF6B00]/20">
+                  <CheckCircle2 className="w-4 h-4 text-[#FF6B00]" />
+                </span>
+                <span className="text-sm sm:text-base font-medium leading-snug">{item}</span>
+              </motion.li>
+            ))}
+          </ul>
 
-            {/* Социальное доказательство - ОБНОВЛЕННАЯ СЕКЦИЯ */}
-            <div className="mt-20 pt-10 border-t border-white/5 w-full">
-              <p className="text-slate-500 text-xs font-bold uppercase tracking-[0.2em] text-center mb-10">
-                Нам доверяют лидеры индустрии Казахстана
-              </p>
-              <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-8 opacity-30 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-700 ease-in-out">
-                {/* Логотипы в виде стилизованного текста (вместо картинок для чистоты кода) */}
-                <span className="text-white font-black text-xl tracking-tighter">KAZMUNAYGAS</span>
-                <span className="text-white font-black text-xl tracking-tighter">BI GROUP</span>
-                <span className="text-white font-black text-xl tracking-tighter">KAZTRANSOIL</span>
-                <span className="text-white font-black text-xl tracking-tighter">QAZAQGAZ</span>
-                <span className="text-white font-black text-xl tracking-tighter">KAZATOMPROM</span>
-              </div>
-              <p className="text-slate-600 text-sm text-center mt-10 font-medium">
-                и еще более <span className="text-slate-400">500 предприятий</span> по всей стране
-              </p>
-            </div>
-
-            {/* Дополнительные бейджи с преимуществами */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="flex flex-wrap items-center justify-center gap-8 mt-16 pt-8 border-t border-white/5"
+          <div className="flex flex-col gap-3 w-full max-w-sm mx-auto sm:max-w-md sm:flex-row sm:justify-center lg:max-w-none mb-12 sm:mb-16">
+            <Button
+              onClick={() =>
+                document.getElementById('contact-form')?.scrollIntoView({ behavior: 'smooth' })
+              }
+              size="lg"
+              className="w-full sm:flex-1 sm:max-w-[220px] bg-[#FF6B00] hover:bg-orange-600 text-white border-0"
             >
-              <div className="flex items-center gap-2 text-sm text-slate-500">
-                <ShieldCheck className="w-5 h-5 text-green-500" />
-                Соответствие законам РК
-              </div>
-              <div className="flex items-center gap-2 text-sm text-slate-500">
-                <CheckCircle2 className="w-5 h-5 text-green-500" />
-                Официальный сертификат
-              </div>
-              <div className="flex items-center gap-2 text-sm text-slate-500">
-                <span className="w-5 h-5 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-500 text-xs font-bold">24/7</span>
-                Поддержка экспертов
-              </div>
-            </motion.div>
+              Начать обучение
+            </Button>
+            <Button
+              onClick={() =>
+                document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' })
+              }
+              variant="outline"
+              size="lg"
+              className="w-full sm:flex-1 sm:max-w-[220px] text-white border-white/30 bg-black/20 hover:bg-white/10 backdrop-blur-sm"
+            >
+              Посмотреть курсы
+            </Button>
+          </div>
+
+          <div className="pt-8 sm:pt-10 border-t border-white/10">
+            <p className="text-slate-400 text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] mb-6 sm:mb-8">
+              Нам доверяют лидеры индустрии Казахстана
+            </p>
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-4 sm:gap-x-10 opacity-40 sm:opacity-50">
+              {['KAZMUNAYGAS', 'BI GROUP', 'KAZTRANSOIL', 'QAZAQGAZ', 'KAZATOMPROM'].map(
+                (name) => (
+                  <span
+                    key={name}
+                    className="text-white font-black text-xs sm:text-base tracking-tight"
+                  >
+                    {name}
+                  </span>
+                )
+              )}
+            </div>
+            <p className="text-slate-500 text-xs sm:text-sm mt-6">
+              и ещё более <span className="text-slate-300">500 предприятий</span> по всей стране
+            </p>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+            className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-8 pt-6 border-t border-white/5 text-xs sm:text-sm text-slate-400"
+          >
+            <span className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-green-500 shrink-0" />
+              Соответствие законам РК
+            </span>
+            <span className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
+              Официальный сертификат
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="w-4 h-4 rounded-full bg-[#FF6B00]/30 flex items-center justify-center text-[10px] font-bold text-[#FF6B00]">
+                24
+              </span>
+              Поддержка экспертов
+            </span>
           </motion.div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
