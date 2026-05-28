@@ -1,8 +1,7 @@
 import type { Plugin } from 'vite';
 import { config as loadEnv } from 'dotenv';
-import { runTutorChat, type ChatTurn } from './lib-server/tutor';
+import { runTutor, type ChatTurn } from './lib-server/tutor-engine';
 
-/** Dev-only proxy for /api/tutor (production uses Vercel serverless) */
 export function tutorDevApiPlugin(): Plugin {
   return {
     name: 'tutor-dev-api',
@@ -27,18 +26,6 @@ export function tutorDevApiPlugin(): Plugin {
         });
         req.on('end', () => {
           void (async () => {
-            const apiKey = process.env.GEMINI_API_KEY;
-            if (!apiKey) {
-              res.statusCode = 503;
-              res.setHeader('Content-Type', 'application/json');
-              res.end(
-                JSON.stringify({
-                  error: 'GEMINI_API_KEY не задан в .env.local (бесплатно: aistudio.google.com/apikey)',
-                })
-              );
-              return;
-            }
-
             try {
               const body = JSON.parse(raw || '{}') as {
                 message?: string;
@@ -52,20 +39,21 @@ export function tutorDevApiPlugin(): Plugin {
                 return;
               }
 
-              const reply = await runTutorChat(
-                message,
-                body.history ?? [],
-                apiKey,
-                process.env.GEMINI_MODEL
-              );
+              const reply = await runTutor(message, body.history ?? [], {
+                groqApiKey: process.env.GROQ_API_KEY,
+                geminiApiKey: process.env.GEMINI_API_KEY,
+                groqModel: process.env.GROQ_MODEL,
+                geminiModel: process.env.GEMINI_MODEL,
+              });
               res.statusCode = 200;
               res.setHeader('Content-Type', 'application/json');
               res.end(JSON.stringify({ reply }));
             } catch (err) {
-              console.error('[tutor-dev-api]', err);
+              const msg = err instanceof Error ? err.message : 'Ошибка AI';
+              console.error('[tutor-dev-api]', msg);
               res.statusCode = 502;
               res.setHeader('Content-Type', 'application/json');
-              res.end(JSON.stringify({ error: 'Ошибка ответа AI-сервиса' }));
+              res.end(JSON.stringify({ error: msg }));
             }
           })();
         });
