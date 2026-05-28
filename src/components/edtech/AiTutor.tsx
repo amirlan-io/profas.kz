@@ -84,7 +84,7 @@ export function AiTutor({
       appendMessage({
         id: `e-${Date.now()}`,
         role: 'assistant',
-        content: `⚠️ ${msg}. Добавьте GEMINI_API_KEY в Vercel (бесплатно: aistudio.google.com/apikey).`,
+        content: `⚠️ ${msg}`,
       });
     } finally {
       setLoading(false);

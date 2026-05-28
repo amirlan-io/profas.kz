@@ -10,7 +10,7 @@ export async function runTutorChat(
   message: string,
   history: ChatTurn[],
   apiKey: string,
-  model = 'gemini-2.0-flash'
+  model = 'gemini-1.5-flash'
 ): Promise<string> {
   const contents = [
     ...history.slice(-10).map((m) => ({

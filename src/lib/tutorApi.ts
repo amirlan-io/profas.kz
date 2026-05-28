@@ -15,9 +15,17 @@ export async function sendTutorMessage(
     }),
   });
 
-  const data = (await res.json().catch(() => ({}))) as { reply?: string; error?: string };
+  let data: { reply?: string; error?: string } = {};
+  const text = await res.text();
+  try {
+    data = JSON.parse(text) as typeof data;
+  } catch {
+    if (!res.ok) {
+      throw new Error(text.slice(0, 120) || `Ошибка сервера (${res.status})`);
+    }
+  }
   if (!res.ok) {
-    throw new Error(data.error ?? 'Не удалось получить ответ от AI');
+    throw new Error(data.error ?? `Ошибка сервера (${res.status})`);
   }
   if (!data.reply) {
     throw new Error('Пустой ответ от AI');
