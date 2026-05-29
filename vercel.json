@@ -23,7 +23,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' https: data: blob:; connect-src 'self' https://formspree.io https://profas-back.vercel.app https://*.vercel.app; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://formspree.io"
+          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' https: data: blob:; connect-src 'self' https://formspree.io https://profas-back.vercel.app https://www.profas.kz https://profas.kz; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://formspree.io"
         }
       ]
     }
