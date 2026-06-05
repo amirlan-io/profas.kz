@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 
-const whatsappNumber = '77007323366';
+const whatsappNumber = '77713025797';
 const message = encodeURIComponent('Здравствуйте! Хочу проконсультироваться по поводу обучения.');
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
 

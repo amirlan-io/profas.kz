@@ -23,8 +23,8 @@ export const Footer = () => {
               Ведущий образовательный центр по профессиональной сертификации и безопасности в Казахстане. Работаем по всей территории РК.
             </p>
             <div className="space-y-4">
-              <a href="tel:+77007323366" className="flex items-center gap-3 text-slate-900 font-bold hover:text-orange-500 transition-colors">
-                <Phone className="w-5 h-5 text-orange-500" /> +7 700 732 3366
+              <a href="tel:+77713025797" className="flex items-center gap-3 text-slate-900 font-bold hover:text-orange-500 transition-colors">
+                <Phone className="w-5 h-5 text-orange-500" /> +7 771 302 5797
               </a>
               <a href="mailto:info@pb24.kz" className="flex items-center gap-3 text-slate-600 hover:text-orange-500 transition-colors">
                 <Mail className="w-5 h-5 text-orange-500" /> info@pb24.kz

@@ -89,7 +89,7 @@ export const Navbar = () => {
 
         <div className="flex items-center gap-2 sm:gap-3 ml-auto shrink-0">
           <a
-            href="https://wa.me/77007323366"
+            href="https://wa.me/77713025797"
             target="_blank"
             rel="noopener noreferrer"
             className="hidden sm:inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-3 lg:px-4 py-2.5 rounded-full text-xs lg:text-sm font-semibold transition-all whitespace-nowrap"
@@ -156,7 +156,7 @@ export const Navbar = () => {
 
               <div className="p-6 border-t border-white/10">
                 <a
-                  href="https://wa.me/77007323366"
+                  href="https://wa.me/77713025797"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-3 bg-orange-500 text-white py-4 rounded-2xl font-bold"
